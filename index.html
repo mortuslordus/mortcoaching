@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Progressie — Kracht & Voeding</title>
+<meta name="theme-color" content="#0f172a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Progressie">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+  <h1>Progressie</h1>
+  <p class="subtitle">Kracht &amp; voeding in één stijgende (of dalende) lijn</p>
+  <nav class="tabs">
+    <button class="tab active" data-tab="kracht">Kracht</button>
+    <button class="tab" data-tab="voeding">Voeding</button>
+  </nav>
+  <div class="header-actions">
+    <label class="doel-label">Doel
+      <select id="doel">
+        <option value="cut">Snijden (cutting)</option>
+        <option value="maintain" selected>Onderhouden (maintaining)</option>
+        <option value="bulk">Bulken</option>
+      </select>
+    </label>
+    <button id="btn-export" class="ghost">Exporteer</button>
+    <label class="ghost file-label">Importeer<input type="file" id="file-import" accept="application/json" hidden></label>
+    <button id="btn-wipe" class="ghost danger">Wis alles</button>
+  </div>
+</header>
+
+<main>
+  <section id="tab-kracht" class="tab-page active">
+    <div class="panel">
+      <h2>Nieuwe set loggen</h2>
+      <form id="form-kracht" class="grid-form">
+        <label>Oefening
+          <input list="oefeningen-lijst" id="k-oefening" required placeholder="bijv. Bankdrukken">
+          <datalist id="oefeningen-lijst"></datalist>
+        </label>
+        <label>Gewicht (kg)
+          <input type="number" id="k-gewicht" min="0" step="0.25" required placeholder="60">
+        </label>
+        <label>Herhalingen
+          <input type="number" id="k-reps" min="1" max="100" step="1" required placeholder="8">
+        </label>
+        <label>Datum
+          <input type="date" id="k-datum" required>
+        </label>
+        <div class="form-footer">
+          <span id="k-e1rm" class="e1rm"></span>
+          <span class="form-buttons">
+            <button type="button" id="k-cancel" class="ghost" hidden>Annuleren</button>
+            <button type="submit" id="k-submit" class="primary">Opslaan</button>
+          </span>
+        </div>
+      </form>
+    </div>
+
+    <div class="panel">
+      <h2>Oefeningen beheren</h2>
+      <div class="beheer-add">
+        <input type="text" id="new-oefening" placeholder="Nieuwe oefening, bijv. Deadlift">
+        <button type="button" id="btn-add-oefening" class="primary">Toevoegen</button>
+      </div>
+      <div id="oefeningen-beheer" class="beheer-list"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Trend per oefening</h2>
+        <select id="k-select"></select>
+      </div>
+      <div id="k-trend-badge" class="trend-badge"></div>
+      <div id="k-chart" class="chart"></div>
+      <p class="hint">Geschatte 1RM (Epley: gewicht × (1 + reps / 30)). De stippellijn is de trend (lineaire regressie).</p>
+    </div>
+
+    <div class="panel">
+      <h2>Overzicht oefeningen</h2>
+      <div id="k-overview" class="overview"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Geschiedenis</h2>
+      <div class="table-wrap">
+        <table id="k-table">
+          <thead><tr><th>Datum</th><th>Oefening</th><th>Gewicht</th><th>Reps</th><th>e1RM</th><th>Volume</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="tab-voeding" class="tab-page">
+    <div class="panel">
+      <h2>Dag loggen</h2>
+      <form id="form-voeding" class="grid-form">
+        <label>Datum
+          <input type="date" id="v-datum" required>
+        </label>
+        <label>Calorieën (kcal)
+          <input type="number" id="v-kcal" min="0" step="1" required placeholder="2500">
+        </label>
+        <label>Eiwitten (g)
+          <input type="number" id="v-eiwit" min="0" step="1" placeholder="150">
+        </label>
+        <label>Koolhydraten (g)
+          <input type="number" id="v-koolhydraten" min="0" step="1" placeholder="300">
+        </label>
+        <label>Vetten (g)
+          <input type="number" id="v-vetten" min="0" step="1" placeholder="70">
+        </label>
+        <label>Lichaamsgewicht (kg, optioneel)
+          <input type="number" id="v-gewicht" min="0" step="0.1" placeholder="80">
+        </label>
+        <div class="form-footer">
+          <span class="e1rm"></span>
+          <span class="form-buttons">
+            <button type="button" id="v-cancel" class="ghost" hidden>Annuleren</button>
+            <button type="submit" id="v-submit" class="primary">Opslaan</button>
+          </span>
+        </div>
+      </form>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Trend</h2>
+        <select id="v-select">
+          <option value="kcal">Calorieën</option>
+          <option value="eiwit">Eiwitten</option>
+          <option value="koolhydraten">Koolhydraten</option>
+          <option value="vetten">Vetten</option>
+          <option value="gewicht">Lichaamsgewicht</option>
+        </select>
+      </div>
+      <div id="v-trend-badge" class="trend-badge"></div>
+      <div id="v-chart" class="chart"></div>
+      <p class="hint">De stippellijn is de trend over de gelogde dagen (lineaire regressie).</p>
+    </div>
+
+    <div class="panel">
+      <h2>Geschiedenis</h2>
+      <div class="table-wrap">
+        <table id="v-table">
+          <thead><tr><th>Datum</th><th>kcal</th><th>Eiwit</th><th>Koolh.</th><th>Vetten</th><th>Gewicht</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="toast" class="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
