@@ -28,3 +28,6 @@ Open `index.html` in een browser, of serveer de map: `python3 -m http.server 800
 - `styles.css` — styling
 - `app.js` — logica (opslag, e1RM, trend/regressie, grafieken, doel, bewerken)
 - `manifest.webmanifest`, `sw.js`, `icon.svg` — PWA (icoon + offline)
+
+## Versie
+- v1.0 — eerste release: kracht + voeding met trendlijnen, doel (cut/maintain/bulk), eigen oefeningen, bewerken, PWA.
